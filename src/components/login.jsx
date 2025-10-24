@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
+
+
+
 
 function Login() {
   const [emailOrMobile, setEmailOrMobile] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login, guestLogin } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,7 +21,7 @@ function Login() {
         password
       });
 
-      localStorage.setItem("token", res.data.token); // store JWT
+      login(res.data.token, res.data.name);
       alert(res.data.message); // "Login successful"
       navigate("/"); // redirect to home
     } catch (err) {
@@ -24,6 +30,7 @@ function Login() {
   };
 
   const handleGuest = () => {
+    guestLogin();
     alert("Logged in as Guest!");
     navigate("/"); // direct to home
   };
@@ -49,6 +56,14 @@ function Login() {
         <button type="submit">Sign In</button>
       </form>
       <button onClick={handleGuest}>Login as Guest</button>
+
+      <p>
+        Don't have an account?{" "}
+        <Link to="/Signup" >
+        Sign up
+        </Link>
+      </p>
+
     </div>
   );
 }

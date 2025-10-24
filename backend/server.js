@@ -4,8 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('./models/user.js');
-const user = require('./models/user.js');
+const users = require('./models/user.js');
 
 dotenv.config();
 const app=express();
@@ -16,25 +15,24 @@ app.use(cors());
 
 // connectig mongoDB heereee
 
-mongoose
-.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("MongoDB connecteddd"))
 .catch((err) => console.log(err));
 
 
 //signup process route 
 
-app.post("/api/auth.signup",async(req,res) => {
+app.post("/api/auth/signup",async(req,res) => {
     try{
-        const { emailOrMobile,password} = req.body;
+        const { name,emailOrMobile,password} = req.body;
 
-        const existingUser = await User.findOne({emailOrMobile});
+        const existingUser = await users.findOne({emailOrMobile});
         if(existingUser){
             return res.status(400).json({message:"User already exists!!"});
         }
 
         const hashedPassword = await bcrypt.hash(password,10);
-        const newUser = new User({emailOrMobile,password:hashedPassword});
+        const newUser = new users({name,emailOrMobile,password:hashedPassword});
         await newUser.save();
 
         res.json({message:"Account created successfully!!!"});
@@ -47,31 +45,43 @@ app.post("/api/auth.signup",async(req,res) => {
 });
 
 
-// login process route 
+// login process route
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { emailOrMobile, password } = req.body;
+        console.log('Login attempt for:', emailOrMobile);
 
-app.post('/api/auth/login',async(req,res) => {
-    try{
-        const {emailOrMobile,password}=req.body;
-
-        const usere = await User.findOne({emailOrMobile});
-        if(!user){
-            return res.status(400).json({message:"User not found!!!"});
+        // ✅ This is the corrected query with .select()
+        const foundUser = await users.findOne({ emailOrMobile }).select('+password');
+        
+        console.log('User found:', !!foundUser);
+        if (!foundUser) {
+            return res.status(400).json({ message: "User not found!!!" });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-            return res.status(400).json({message:"Invalid credentials"});
+        console.log('Comparing passwords...');
+        const isMatch = await bcrypt.compare(password, foundUser.password);
+        
+        console.log('Password match:', isMatch);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        const token = jwt.sign({id:user._id},process.env,JWT_SECRET,{expires:"1h",
-        });
+        console.log('Generating token...');
+        // 🛑 Make sure 'jwt' is required at the top of your file!
+        const token = jwt.sign(
+            { id: foundUser._id },
+            process.env.JWT_SECRET || 'defaultsecret',
+            { expiresIn: "1h" }
+        );
 
-        res.json({message:"Login successful",token});
+        console.log('Login successful');
+        // ✅ This sends the success response back
+        res.json({ message: "Login successful", token, name: foundUser.name });
 
-    }
-
-    catch(error){
-        res.status(500).json({message:"Server error!!"});
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: "Server error!!" });
     }
 });
 

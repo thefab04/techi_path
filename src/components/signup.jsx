@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Signup() {
+  const [name, setName] = useState("");
   const [emailOrMobile, setEmailOrMobile] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ function Signup() {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5000/api/auth/signup", {
+        name,
         emailOrMobile,
         password
       });
@@ -25,6 +27,15 @@ function Signup() {
     <div>
       <h2>Create Account</h2>
       <form onSubmit={handleSignup}>
+
+        <input
+          type="text"        
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)} 
+          required
+        />
+
         <input 
           type="text"
           placeholder="Email or Mobile"
@@ -32,7 +43,7 @@ function Signup() {
           onChange={(e) => setEmailOrMobile(e.target.value)}
           required
         />
-        <input 
+        <input
           type="password"
           placeholder="Create Password"
           value={password}
@@ -41,6 +52,14 @@ function Signup() {
         />
         <button type="submit">Sign Up</button>
       </form>
+
+      <p>
+        Already have an account?{ " "}
+        <Link to="/login">
+        Login
+        </Link>
+      </p>
+
     </div>
   );
 }
