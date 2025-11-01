@@ -1,0 +1,514 @@
+:root{
+  --bg-opacity: 0.1; /* Slightly increased opacity for a more visible gradient glow */
+  --card-bg: rgba(255,255,255,0.02);
+  --card-border: rgba(255,255,255,0.1);
+  --glass-blur: 10px;
+  
+  /* NEON ACCENTS: Aqua, Cyan, and Lime for a vivid, modern gradient */
+  /* These HSL values use high saturation (S) and medium lightness (L) for a glow effect */
+  --accent-1: 175 100% 50%; /* Pure Cyan/Aqua */
+  --accent-2: 150 100% 50%; /* Vivid Green/Lime */
+  --accent-3: 195 100% 55%; /* Bright Sky Blue */
+  
+  --text: 0 0% 98%;    /* Near White for main text */
+  --muted: 0 0% 75%;    /* Light Gray for muted text */
+  --shadow: 0 10px 30px rgba(0,0,0,0.8);
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Reset + layout (NO CHANGE) */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+  background: #000000; /* Pure Black Background */
+  color: hsl(var(--text));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* 🌀 Animated gradient layer (behind content) */
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:0;
+  background: conic-gradient(from 120deg at 50% 50%, 
+    hsl(var(--accent-1) / 1.0),
+    hsl(var(--accent-2) / 1.0),
+    hsl(var(--accent-3) / 1.0),
+    hsl(var(--accent-1) / 1.0)
+  );
+  /* The blur will blend the colors and the saturation is kept high! */
+  filter: blur(80px); 
+  transform: translateZ(0);
+  opacity: var(--bg-opacity);
+  animation: rotateGrad 18s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes rotateGrad{
+  from{transform: rotate(0deg) scale(1.05)}
+  to{transform: rotate(360deg) scale(1.05)}
+}
+
+/* Subtle moving radial highlights (NO CHANGE) */
+body::after{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background: radial-gradient(600px 400px at 10% 20%, rgba(255,255,255,0.03), transparent 15%),
+                radial-gradient(500px 300px at 90% 80%, rgba(255,255,255,0.03), transparent 15%);
+  mix-blend-mode: overlay;
+  opacity:0.8;
+  animation: float 16s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+/* Container and Glass Card (NO CHANGE to .glass rules) */
+.wrap{position:relative;
+  z-index:1;
+  width: fit-content;
+  max-width:490px;
+  margin:48px auto;
+  padding:36px}
+.glass{
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+  border: 1px solid var(--card-border);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
+  box-shadow: var(--shadow);
+  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
+}
+.glass:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.9);
+}
+
+/* input box style */
+.inputbox{
+  border-radius: 10px;
+  opacity: 90%;
+  size: 30px;
+  font-size: 15px;
+ position: relative;
+  display: inline-block;
+  padding: 5px 19px;
+  border: none;
+  font-size: 12px;
+  background-color: inherit;
+  border-radius: 100px;
+  font-weight: 60;
+  color: #ffffff40;
+  box-shadow: 0 0 0 2px #ffffff20;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+
+}
+
+.inputbox:hover {
+  box-shadow: 0 0 0 2px #0a797e8f;
+  color: #ffffffb7;
+}
+/* buttom sytle */
+
+.animated-button {
+  position: relative;
+  display: inline-block;
+  padding: 5px 19px;
+  border: none;
+  font-size: 12px;
+  background-color: inherit;
+  border-radius: 100px;
+  font-weight: 60;
+  color: #ffffff40;
+  box-shadow: 0 0 0 2px #ffffff20;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.animated-button span:last-child {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: #09756c;
+  border-radius: 10%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.animated-button span:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+.animated-button:hover {
+  box-shadow: 0 0 0 1px #0a797e8f;
+  color: #ffffffb7;
+}
+
+.animated-button:active {
+  scale: 0.95;
+}
+
+.animated-button:hover span:last-child {
+  width: 10px;
+  height: 10px;
+  opacity: 1;
+}
+
+.logo_login{
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+
+}
+
+
+    /* Grid for jobspart (left) + rolespart (right) */
+    .main-grid{display:grid;
+      grid-template-columns:1fr 810px;
+      gap:-2px;
+      align-items:center;
+      margin-top:26px;
+      overflow: hidden;
+    }
+
+.jobspart{
+  z-index: 9999999;
+  position:sticky;
+      top:auto;
+      height:1900px;
+      width:fit-content;
+      overflow: hidden;
+    }
+
+    .rolespart{
+       overflow-y: auto;
+    }
+
+.roadmap-container{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+        gap: 50px; /* Gap between the cards */
+        text-align: center;
+        font-size: 8px;
+
+}
+
+#rolehead{
+  text-align: center;
+}
+
+.glass2{
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+  border: 1px solid var(--card-border);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
+  box-shadow: var(--shadow);
+  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
+  margin: 20px;
+  margin-right: 30px;
+ 
+
+}
+.glass2:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.9);
+}
+
+.glass3{
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+  border: 1px solid var(--card-border);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
+  box-shadow: var(--shadow);
+  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
+  margin: 20px;
+  overflow: hidden;
+  
+}
+.glass3:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.9);
+}
+
+.roadmap-container{
+  text-align: center;
+}
+
+.role-card-wrapper{
+display: grid;
+text-align: center;
+}
+
+.role-card-wrapper:hover{
+  transform:translateY(-2px);
+}
+
+#role-heading{
+  align-items: center;
+  text-align: center;
+}
+
+/*
+.glasslevels{
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+  border: 1px solid var(--card-border);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
+  box-shadow: var(--shadow);
+  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
+  margin: 20px;
+  margin-right: 30px;
+  margin-top: 20px;
+ 
+
+}
+
+.glasslevels:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.9);
+}
+*/
+/* Container around the whole thing */
+.glasslevels1 {
+  position: relative;
+  z-index: 1;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* GRID: 3 cards per row, responsive */
+.roadmap-grid1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 3 across on desktop */
+  row-gap: 40px;
+  column-gap: 90px;
+  width: 100%;
+  max-width: fit-content;
+  margin-top: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Each card (collapsed state) */
+.roadmap-card1 {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 18px;
+  color: hsl(var(--text));
+  cursor: pointer;
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  text-align: left;
+  min-height: 188px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Small lift on hover */
+.roadmap-card1:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+}
+
+/* The header/title always visible */
+.level-label {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+  color: hsl(var(--text));
+}
+
+/* Details are hidden in normal cards */
+.roadmap-details {
+  margin-top: 12px;
+  text-align: left;
+  opacity: 80%;
+  max-height:fit-content;
+  overflow: hidden;
+  transition: opacity 260ms ease, max-height 360ms ease;
+  margin-left: 20px;
+  
+}
+
+/* ACTIVE — expanded card: act like a centered modal */
+.roadmap-card1.active {
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+  border: 1px solid var(--card-border);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
+  box-shadow: var(--shadow);
+  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
+
+
+  pointer-events: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(1000px, 75%);
+  height: fit-content;
+  transform: translate(-50%, -50%) !important;
+  z-index: 111111;           /* above overlay */
+  
+  border: 1px solid rgba(54, 5, 5, 0.06);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.85);
+  padding: 26px;
+  overflow: auto;
+  overflow-y:hidden;
+  text-align: left;
+  border-radius: 14px;
+}
+
+/* show details when expanded */
+.roadmap-card1.active .roadmap-details {
+  opacity: 1;
+  max-height:max-content;
+}
+
+/* Close button in expanded card */
+.close-x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: hsl(var(--text));
+  font-size: 24px;
+  cursor:auto;
+  z-index: 1120;
+}
+
+/* Overlay/blur that darkens background (below active card) */
+.overlay-blur {
+  position: fixed;
+  inset: 0;
+  z-index: 1100; /* BELOW the active card's 1101 */
+  
+pointer-events: none;
+  transition: opacity 1620ms ease;
+}
+
+/* small responsiveness */
+@media (max-width: 1024px) {
+  .roadmap-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .roadmap-grid { grid-template-columns: 1fr; gap: 16px; }
+  .roadmap-card.active { width: 94%; height: 86vh; }
+}
+
+
+.why{
+  line-height: 20.6px;
+}
+
+/* Common UL reset and layout */
+.listlearn {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.listresources {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* For "What You'll Learn" list items */
+.listbox {
+  position: relative;
+  padding-left: 24px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Small bullet icon before each */
+.listbox::before {
+  content: "•";
+  position: absolute;
+  left: 8px;
+  top: 0;
+  color: #4dabf7; /* soft blue bullet */
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Subheading styling */
+.subheadcard {
+  margin-top: 22px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #d1d1d1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+  .listresources {
+    display: flex;
+    flex-wrap: wrap;        /* allows wrapping if too many */
+    gap: 12px;              /* space between each item */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: flex-start; /* or center / space-between if you prefer */
+  }
+  
+
+  .listresources li {
+    flex: 0 1 auto;         /* makes items fit content naturally */
+  }
+
+.listresources a {
+  border: #ffffff77 solid 1px;
+  padding: 2px 5px;
+  color: #dee6e4;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 10;
+  border-radius: 6px;
+  display: inline-block;  /* ensures nice button-like layout */
+  white-space: nowrap;    /* keeps text in one line */
+}
+
+.listresources a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #9ecbff;
+  transform: scale(1.03);
+  margin-left: 10px;
+}
+
+/* Optional: add a small icon for external links */
+.listresources a::after {
+  content: " ↗";
+  font-size: 0.9em;
+  opacity: 0.7;
+}

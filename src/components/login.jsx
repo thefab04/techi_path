@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-
-
-
-
+import "../styles/components.css";
+import tplogo from "../assets/tplogo_white_png.png";
 
 function Login() {
   const [emailOrMobile, setEmailOrMobile] = useState("");
@@ -18,52 +16,69 @@ function Login() {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", {
         emailOrMobile,
-        password
+        password,
       });
 
       login(res.data.token, res.data.name);
-      alert(res.data.message); // "Login successful"
-      navigate("/"); // redirect to home
+      alert(res.data.message || "Login successful!");
+      setTimeout(() => navigate("/"), 1500);
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      alert(err.response?.data?.message || "Login failed!");
     }
   };
 
   const handleGuest = () => {
     guestLogin();
     alert("Logged in as Guest!");
-    navigate("/"); // direct to home
+    setTimeout(() => navigate("/"), 1500);
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input 
-          type="text" 
-          placeholder="Email or Mobile"
-          value={emailOrMobile}
-          onChange={(e) => setEmailOrMobile(e.target.value)}
-          required
-        />
-        <input 
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign In</button>
-      </form>
-      <button onClick={handleGuest}>Login as Guest</button>
+    <div className="wrap">
+      <div className="glass">
+        <div className="logo_login">
+          <img src={tplogo} height="auto" width="150px" alt="" />
+        </div>
 
-      <p>
-        Don't have an account?{" "}
-        <Link to="/Signup" >
-        Sign up
-        </Link>
-      </p>
 
+
+        <h4>Login</h4>
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Email or Mobile"
+            value={emailOrMobile}
+            onChange={(e) => setEmailOrMobile(e.target.value)}
+            required
+            className="inputbox"
+          />
+          <br />
+          <br />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="inputbox"
+          />
+          <br />
+          <br />
+          <button type="submit" className="animated-button">
+            Sign In
+          </button>
+        </form>
+
+        <br />
+        <p>
+          Don’t have an account? <Link to="/Signup">Sign up</Link>
+        </p>
+
+        <p>or</p>
+        <button onClick={handleGuest} className="animated-button">
+          Login as Guest
+        </button>
+      </div>
     </div>
   );
 }

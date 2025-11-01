@@ -3,13 +3,15 @@ import React from "react";
 function Navbar() {
   return (
     <nav className="navbar">
-      <h1 id="logo">Edu Path</h1>
+      <div className="glassnav">
+      <h1 id="logo">TechiPath</h1>
       <ul>
-        <li>Home</li>
+        
       
-        <li>About</li>
-        <li>Contact</li>
+        <li id="listitem">About</li>
+        
       </ul>
+      </div>
     </nav>
   );
 }

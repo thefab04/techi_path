@@ -36,9 +36,13 @@ function AppContent() {
           />
 
           <Route
-            path="/roadmap"
+            path="/roadmap/:role"
             element={isAuthenticated ? <Roadmap /> : <Navigate to="/login" />}
           />
+
+          
+
+
         </Routes>
       </main>
 
