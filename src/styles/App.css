@@ -6,7 +6,7 @@
 }
 
 .glassnav{
-  text-align: left;
+  text-align: center;
   background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
   border: 1px solid var(--card-border);
   border-radius:16px;
@@ -14,22 +14,46 @@
   backdrop-filter: blur(var(--glass-blur)) saturate(100%);
   box-shadow: var(--shadow);
   transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
-  margin-top: 10px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+}
+.glassfooter{
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+  border: 1px solid var(--card-border);
+  border-radius:16px;
+  padding:0px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
+  box-shadow: var(--shadow);
+  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
+  margin-top: 20px;
+justify-content: center;
+}
+.glassfooter:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.9);
 }
 .glassnav:hover{
   transform:translateY(-6px);
   box-shadow:0 20px 50px rgba(0,0,0,0.9);
 }
+.contactlist{
+  flex-direction: row;
+  gap: 10px;
+}
 
-#logo{
+.logo{
   margin-left:20px ;
-  justify-content: center;
+  justify-content: left;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 nav.navbar {
   position: sticky;
   text-align: left; 
   color: white;
-  padding: 1px;
+  padding: 0px;
 }
 
 
@@ -39,7 +63,7 @@ nav.navbar ul {
   justify-content: right;
   gap: 50px;
   padding: 0;
-  margin-top: -28px;
+
   margin-right: 50px;
 }
 
@@ -47,17 +71,7 @@ nav.navbar li {
   cursor: pointer;
 }
 
-footer.footer {
-  text-align: center;
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
-  border: 1px solid var(--card-border);
-  border-radius:16px;
-  padding:1px;
-  backdrop-filter: blur(var(--glass-blur)) saturate(100%);
-  box-shadow: var(--shadow);
-  transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 450ms;
-margin: 15px;
-}
+
 
 .roadmap-card {
   border: 1px solid #ddd;

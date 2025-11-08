@@ -1,59 +1,88 @@
 import React, { useState } from "react";
 
-const Jobsearch = () => {
+const SearchBox = () => {
   const [query, setQuery] = useState("");
-  const [jobs, setJobs] = useState([]);
-  const [searched, setSearched] = useState(false); // 👈 NEW state
+  const [answer, setAnswer] = useState(""); // store plain answer
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSearch = async () => {
-    if (!query) return;
-    setSearched(true); // 👈 user has initiated search
-    const res = await fetch(`http://localhost:5000/api/jobs?q=${query}`);
-    const data = await res.json();
-    console.log("API response:", data); // helpful debug log
-    setJobs(data.data || []);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setAnswer("");
+
+    try {
+      const response = await fetch("http://localhost:5678/webhook-test/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }), // send user query to workflow
+      });
+
+      const data = await response.json();
+      console.log("Workflow response:", data);
+
+      // assume workflow returns: { answer: "Your plain answer here" }
+      if (data.answer) {
+        setAnswer(data.answer);
+      } else {
+        setError("No response from workflow.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Error fetching response.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h2>Search openings</h2>
-
-      <div>
+    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
+      <form onSubmit={handleSearch} style={{ display: "flex", gap: "10px" }}>
         <input
           type="text"
-          placeholder="Enter any role"
+          placeholder="Ask me anything..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          required
+          style={{
+            flex: 1,
+            padding: "8px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+          }}
         />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+        <button
+          type="submit"
+          style={{
+            padding: "8px 16px",
+            borderRadius: "8px",
+            border: "none",
+            background: "#007bff",
+            color: "#fff",
+            cursor: "pointer",
+          }}
+        >
+          Ask
+        </button>
+      </form>
 
-      <div>
-        {searched && jobs.length === 0 && (
-          <p className="text-gray-500">No jobs found yet...</p>
-        )}
-
-        {jobs.length > 0 &&
-          jobs.map((job, i) => (
-            <div key={i}>
-              <h3>{job.job_title}</h3>
-              <p>{job.employer_name}</p>
-              <p>
-                {job.job_city}, {job.job_country}
-              </p>
-              <a
-                href={job.job_apply_link}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-500 underline mt-2 inline-block"
-              >
-                Apply Now →
-              </a>
-            </div>
-          ))}
-      </div>
+      {loading && <p style={{ marginTop: "10px" }}>Processing...</p>}
+      {error && <p style={{ marginTop: "10px", color: "red" }}>{error}</p>}
+      {answer && (
+        <div
+          style={{
+            marginTop: "20px",
+            padding: "10px",
+            borderRadius: "8px",
+            background: "#f1f1f1",
+          }}
+        >
+          {answer}
+        </div>
+      )}
     </div>
   );
 };
 
-export default Jobsearch;
+export default SearchBox;

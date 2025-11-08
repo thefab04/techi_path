@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const users = require('./models/user.js');
+const Feedback = require("./routes/feedbackroutes.js")
 
 dotenv.config();
 const app=express();
@@ -12,31 +13,17 @@ const app=express();
 app.use(express.json());
 app.use(cors());
 
+// Routes
 
 
-app.get("/api/jobs",async (req,res) => {
-    const query = req.query.q; // job is searched here in frontend
 
-    try {
-        const response = await fetch(`https://jsearch.p.rapidapi.com/search?query=${query}&num_pages=1`,
-            {
-                method: "GET",
-                headers: {
-                    "x-rapidapi-key": "c9b103f0c2msh4c2c7636bbc513ep16c3f8jsn38a2bdcc2ca",
-                    "x-rapidapi-host": "jsearch.p.rapidapi.com",
-                },
-            }
-        );
 
-        const data = await response.json();
-        res.json(data);
+// existing routes
+app.use("/api/users", userRoutes);
 
-    }
-    catch(error){
-        console.error("Error fethcing Jobs",error);
-        res.status(500).json({message:"Error fetching jobs"});
-    }
-});
+// new feedback route
+app.use("/api/feedback", Feedback);
+
 
 
 

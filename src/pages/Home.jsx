@@ -2,8 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import RoadmapCard from "../components/RoadmapCard"; //  import the component
 import { Cloud, Cybersecurity, DataAI, Design, DevRoles, Testing} from "../components/Roles"; // import the roles
-import { dev } from "../data/developer_data";
-import Jobsearch from "../components/jobsearchbox";
+//import { dev } from "../data/developer_data";
+//import SearchBox from "../components/jobsearchbox";
+import ResumeBuilder from "../components/resumebuild";
+import Suggestion from "../components/suggestion";
+import About from "./About";
 
 function Home() {
 
@@ -16,24 +19,44 @@ function Home() {
 
  
   return (
+<>
+    <div >
+      <p id="welcometext">Hi there! </p>
+       <p id="paratext">  Every click brings you one step closer to success.</p>
+</div>
+     
+
+
 
     <section className="main-grid">
 
 
-     
 
 <jobpart className="jobspart">
+  
+<div className="glass3">
+    <About />
+</div>
+
   <div className="glass3">
-      <Jobsearch />
+  <h5 id="rolehead1"></h5>
+     <ResumeBuilder />
+
+      </div>
+
+      <div className="glass3">
+      <Suggestion />
       </div>
 </jobpart>
 
 
 <rolespart className="rolespart">
 
-  <h2 id="rolehead">Roles</h2>
 
+<h4 id="rolehead">Explore Roadmaps</h4>
 <div className="glass2">
+
+    
 <h2 id="role-heading">DEVELOPER ROLES</h2>
       <div className="roadmap-container">
         {DevRoles.map((item, index) => (
@@ -147,6 +170,7 @@ function Home() {
 
 
     </section>
+    </>
   );
 }
 export default Home;
