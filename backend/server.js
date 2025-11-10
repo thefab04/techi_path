@@ -1,29 +1,38 @@
-//import progressRoutes from "./routes/progress.js"
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 const users = require('./models/user.js');
-const Feedback = require("./routes/feedbackroutes.js")
+const Feedback = require("./routes/feedbackroutes.js");
 const progressRoutes = require("./routes/progress.js");
-const userRoutes = require("./routes/progress.js");
-
 
 dotenv.config();
-const app=express();
+const app = express();
 
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+app.use(limiter);
 app.use(express.json());
-app.use(cors());
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Allow specific origin
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 // Routes
 
-app.use("/api/progress",progressRoutes);
-
-
-// existing routes
-app.use("/api/users", userRoutes);
+app.use("/api/progress", progressRoutes);
 
 // new feedback route
 app.use("/api/feedback", Feedback);
@@ -38,76 +47,79 @@ mongoose.connect(process.env.MONGO_URL)
 .catch((err) => console.log(err));
 
 
-//signup process route 
+// Signup process route with validation
+app.post("/api/auth/signup", [
+    body('name').isLength({ min: 2 }).withMessage('Name must be at least 2 characters long'),
+    body('emailOrMobile').isLength({ min: 3 }).withMessage('Email or mobile must be at least 3 characters long'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
-app.post("/api/auth/signup",async(req,res) => {
-    try{
-        const { name,emailOrMobile,password} = req.body;
+    try {
+        const { name, emailOrMobile, password } = req.body;
 
-        const existingUser = await users.findOne({emailOrMobile});
-        if(existingUser){
-            return res.status(400).json({message:"User already exists!!"});
+        const existingUser = await users.findOne({ emailOrMobile });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists!!" });
         }
 
-        const hashedPassword = await bcrypt.hash(password,10);
-        const newUser = new users({name,emailOrMobile,password:hashedPassword});
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new users({ name, emailOrMobile, password: hashedPassword });
         await newUser.save();
 
-        res.json({message:"Account created successfully!!!"});
+        res.json({ message: "Account created successfully!!!" });
 
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
     }
-    catch(error){
-        res.status(500).json({message:"Server error"});
-    }
-
 });
 
 
-// login process route
-app.post('/api/auth/login', async (req, res) => {
+// Login process route with validation
+app.post('/api/auth/login', [
+    body('emailOrMobile').isLength({ min: 3 }).withMessage('Email or mobile must be at least 3 characters long'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
         const { emailOrMobile, password } = req.body;
-        console.log('Login attempt for:', emailOrMobile);
 
-        // ✅ This is the corrected query with .select()
         const foundUser = await users.findOne({ emailOrMobile }).select('+password');
-        
-        console.log('User found:', !!foundUser);
+
         if (!foundUser) {
             return res.status(400).json({ message: "User not found!!!" });
         }
 
-        console.log('Comparing passwords...');
         const isMatch = await bcrypt.compare(password, foundUser.password);
-        
-        console.log('Password match:', isMatch);
+
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        console.log('Generating token...');
-        // 🛑 Make sure 'jwt' is required at the top of your file!
         const token = jwt.sign(
             { id: foundUser._id },
             process.env.JWT_SECRET || 'defaultsecret',
             { expiresIn: "1h" }
         );
 
-        console.log('Login successful');
-        // ✅ This sends the success response back
         res.json({
-  message: "Login successful",
-  token,
-  user: {
-    _id: foundUser._id,
-    name: foundUser.name,
-    emailOrMobile: foundUser.emailOrMobile,
-  },
-});
-
+            message: "Login successful",
+            token,
+            user: {
+                _id: foundUser._id,
+                name: foundUser.name,
+                emailOrMobile: foundUser.emailOrMobile,
+            },
+        });
 
     } catch (error) {
-        console.error('Login error:', error);
         res.status(500).json({ message: "Server error!!" });
     }
 });

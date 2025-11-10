@@ -6,6 +6,9 @@ const router = express.Router();
 router.post("/update", async (req, res) => {
   try {
     const { userId, role, level } = req.body;
+    if (!userId || !role || level === undefined) {
+      return res.status(400).json({ success: false, error: "userId, role, and level are required" });
+    }
     let record = await Progress.findOne({ userId, role });
     if (!record) {
       record = new Progress({ userId, role, level });
@@ -15,7 +18,6 @@ router.post("/update", async (req, res) => {
     await record.save();
     res.json({ success: true, progress: record });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success: false, error: "Server error" });
   }
 });

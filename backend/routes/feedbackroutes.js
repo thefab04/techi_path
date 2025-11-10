@@ -7,7 +7,10 @@ router.post('/', async (req, res) => {
   try {
     const { name, email, message, type } = req.body;
     if (!name || !message || !type) {
-      return res.status(400).json({ message: "All required fields missing!" });
+      return res.status(400).json({ message: "Name, message, and type are required!" });
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: "Invalid email format!" });
     }
 
     const feedback = new Feedback({ name, email, message, type });
