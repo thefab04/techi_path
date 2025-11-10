@@ -1,0 +1,5 @@
+- [x] Define total levels per role in Home.jsx
+- [x] Replace progress ul with pie chart components
+- [x] Implement SVG pie chart for each role's progress
+- [x] Style pie charts to match glass theme
+- [ ] Test visual representation on home page

@@ -5,11 +5,13 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/components.css";
 import tplogo from "../assets/tplogo_white_png.png";
 
+
 function Login() {
   const [emailOrMobile, setEmailOrMobile] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login, guestLogin } = useAuth();
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,7 +21,13 @@ function Login() {
         password,
       });
 
-      login(res.data.token, res.data.name);
+      login(res.data.token, res.data.user.name);
+      localStorage.setItem("user",JSON.stringify(res.data.user));
+      localStorage.setItem("username",res.data.user.name);
+      localStorage.setItem("token",res.data.token);
+
+
+
       alert(res.data.message || "Login successful!");
       setTimeout(() => navigate("/"), 1500);
     } catch (err) {

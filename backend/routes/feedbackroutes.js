@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Feedback = require('../models/feedback');
+const Feedback = require('../models/feedbacks.js');
 
 // 📨 Save new feedback
 router.post('/', async (req, res) => {

@@ -8,19 +8,6 @@ const userSchema = new mongoose.Schema(
     emailOrMobile: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 
-    // 👇 Add progress tracking fields
-    enrolledCourses: [
-      {
-        courseId: { type: String }, // or ObjectId ref to a Course model
-        title: { type: String },
-        progress: { type: Number, default: 0 }, // percent (0–100)
-        lastAccessed: { type: Date, default: Date.now },
-        completed: { type: Boolean, default: false },
-      },
-    ],
-
-    // for resume later or email trigger
-    lastCourseViewed: { type: String },
   },
   { timestamps: true }
 );

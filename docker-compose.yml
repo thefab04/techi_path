@@ -21,7 +21,7 @@ services:
       - mongo
 
   frontend:
-    build: ./frontend
+    build: ./src
     container_name: frontend
     ports:
       - "80:80"

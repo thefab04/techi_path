@@ -7,14 +7,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    // Clear localStorage for debugging - remove this after testing
-    localStorage.clear();
-    const token = localStorage.getItem('token');
-    const guest = localStorage.getItem('guest');
-    console.log('Auth check:', { token: !!token, guest: !!guest });
-    setIsAuthenticated(!!(token || guest));
-  }, []);
+
 
   useEffect(() => {
     console.log('isAuthenticated changed:', isAuthenticated);

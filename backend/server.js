@@ -1,3 +1,4 @@
+//import progressRoutes from "./routes/progress.js"
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,6 +7,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const users = require('./models/user.js');
 const Feedback = require("./routes/feedbackroutes.js")
+const progressRoutes = require("./routes/progress.js");
+const userRoutes = require("./routes/progress.js");
+
 
 dotenv.config();
 const app=express();
@@ -15,7 +19,7 @@ app.use(cors());
 
 // Routes
 
-
+app.use("/api/progress",progressRoutes);
 
 
 // existing routes
@@ -91,7 +95,16 @@ app.post('/api/auth/login', async (req, res) => {
 
         console.log('Login successful');
         // ✅ This sends the success response back
-        res.json({ message: "Login successful", token, name: foundUser.name });
+        res.json({
+  message: "Login successful",
+  token,
+  user: {
+    _id: foundUser._id,
+    name: foundUser.name,
+    emailOrMobile: foundUser.emailOrMobile,
+  },
+});
+
 
     } catch (error) {
         console.error('Login error:', error);

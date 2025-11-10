@@ -47,6 +47,30 @@ function Roadmap() {
     (key && (dev[key] || cloud[key] || cyber[key] || datascience[key] || testing[key] || design[key])) ||
     null;
 
+    const handleProgress = async (level) => {
+  const user = JSON.parse(localStorage.getItem("user")); // or however you store user info
+  if (!user) return alert("Please log in to save progress");
+
+  try {
+    const response = await fetch("http://localhost:5000/api/progress/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user._id,
+        role,
+        level,
+      }),
+    });
+    const data = await response.json();
+    if (data.success) {
+      alert(`Progress saved! You completed level ${level}`);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
   useEffect(() => {
     // close on ESC
     const onKey = (e) => {
@@ -114,6 +138,19 @@ function Roadmap() {
                   <br /><br /><br /> {stage.title}
                 </h3>
               </div>
+
+
+            <button
+  className="start-btn"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleProgress(index + 1); // passing level number
+  }}
+>
+  Mark Level {index + 1} as Complete
+</button>
+
+
 
               {activeIndex === index && (
                 <div className="roadmap-details">
