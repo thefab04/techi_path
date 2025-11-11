@@ -9,13 +9,14 @@ const { body, validationResult } = require('express-validator');
 const users = require('./models/user.js');
 const Feedback = require("./routes/feedbackroutes.js");
 const progressRoutes = require("./routes/progress.js");
+const path = require("path");
 
 dotenv.config();
 const app = express();
 
 // ✅ Step 1: Enable CORS **before** anything else
 app.use(cors({
-  origin: ["https://techquest-backend.onrender.com"],
+  origin: ["#"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -115,6 +116,12 @@ app.post("/api/auth/login", [
     console.error('Login error:', error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
 
 // ✅ Step 7: Run server
