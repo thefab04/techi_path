@@ -34,7 +34,7 @@ app.use(express.json());
 // (So that preflight OPTIONS requests don't get blocked)
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 1000,               // allow plenty for local dev
+  max: 10000,               // allow plenty for local dev
   message: 'Too many requests from this IP, please try again later.'
 });
 app.use(limiter);
@@ -120,7 +120,7 @@ app.post("/api/auth/login", [
 
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
 

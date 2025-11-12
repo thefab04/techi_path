@@ -148,7 +148,7 @@ function Roadmap() {
     handleProgress(index + 1); // passing level number
   }}
 >
-Level {index + 1} Completed
+Mark Level {index + 1} as Completed ..✅
 </button>
 
 
