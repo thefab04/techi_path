@@ -16,7 +16,7 @@ const app = express();
 
 // ✅ Step 1: Enable CORS **before** anything else
 app.use(cors({
-  origin: ["#"],
+  origin: ["https://techquest.pages.dev"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
