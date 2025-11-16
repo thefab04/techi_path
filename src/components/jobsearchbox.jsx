@@ -1,88 +1,74 @@
+
 import React, { useState } from "react";
 
-const SearchBox = () => {
+const API_KEY = 'AIzaSyBUP4_f3KHV8GwCIPRGa2cYrIwCKBVpVbQ';
+const SEARCH_ENGINE_ID = 'c6866bc8abb954617';
+
+function SearchBox() {
   const [query, setQuery] = useState("");
-  const [answer, setAnswer] = useState(""); // store plain answer
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  const handleSearch = async () => {
+    if (!query) return;
     setLoading(true);
     setError("");
-    setAnswer("");
-
     try {
-      const response = await fetch("http://localhost:5678/webhook-test/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }), // send user query to workflow
-      });
-
+      const response = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${encodeURIComponent(
+          query
+        )}`
+      );
+      if (!response.ok) throw new Error("Error fetching search results");
       const data = await response.json();
-      console.log("Workflow response:", data);
-
-      // assume workflow returns: { answer: "Your plain answer here" }
-      if (data.answer) {
-        setAnswer(data.answer);
-      } else {
-        setError("No response from workflow.");
-      }
+      setResults(data.items || []);
     } catch (err) {
-      console.error(err);
-      setError("Error fetching response.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-      <form onSubmit={handleSearch} style={{ display: "flex", gap: "10px" }}>
-        <input
-          type="text"
-          placeholder="Ask me anything..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          required
-          style={{
-            flex: 1,
-            padding: "8px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "8px 16px",
-            borderRadius: "8px",
-            border: "none",
-            background: "#007bff",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          Ask
-        </button>
-      </form>
+    <div style={{ padding: "2rem", fontFamily: "Arial" }} className="searchbox">
+      <h1 id="role-heading">Unsure About Something? Search Here!</h1>
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Type your search"
+        style={{ width: "300px", padding: "0.5rem" }}
+        className="inputbox"
+      />
+      <br />
+      <button
+        onClick={handleSearch}
+        style={{ padding: "0.5rem 1rem", marginLeft: "1rem" }}
+        className="animated-button"
+      >
+        Search
+      </button>
 
-      {loading && <p style={{ marginTop: "10px" }}>Processing...</p>}
-      {error && <p style={{ marginTop: "10px", color: "red" }}>{error}</p>}
-      {answer && (
-        <div
-          style={{
-            marginTop: "20px",
-            padding: "10px",
-            borderRadius: "8px",
-            background: "#f1f1f1",
-          }}
-        >
-          {answer}
-        </div>
-      )}
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+<ul className="listresources1">
+  {results.slice(0, 3).map((item) => (
+    <li key={item.cacheId} style={{ margin: "1rem 0" }}>
+      <h4 className="why">{item.snippet}</h4>
+      <a href={item.link} target="_blank" rel="noopener noreferrer"  >
+        <p id="linkpara">click here to view complete details</p>
+        <h5>{item.title}</h5>
+        
+      </a>
+      <p>___________________________________________________</p>
+    </li>
+  ))}
+</ul>
+
     </div>
   );
-};
+}
 
 export default SearchBox;

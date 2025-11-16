@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RoadmapCard from "../components/RoadmapCard";
 import { Cloud, Cybersecurity, DataAI, Design, DevRoles, Testing } from "../components/Roles";
-
+import SearchBox from "../components/jobsearchbox";
 import Suggestion from "../components/suggestion";
 import About from "./About";
 import ProgressPieChart from "../components/ProgressPieChart";
@@ -84,6 +84,11 @@ const Home = () => {
         <jobpart className="jobspart">
           <div className="glass3">
             <About />
+          </div>
+
+          <div className="glass3">
+            <SearchBox />
+
           </div>
 
           <div className="glass3">

@@ -653,6 +653,15 @@ pointer-events: none;
   gap: 6px;
 }
 
+.listresources1 {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 /* For "What You'll Learn" list items */
 .listbox {
   position: relative;
@@ -723,6 +732,62 @@ pointer-events: none;
   font-size: 0.9em;
   opacity: 0.7;
 }
+
+
+  .listresources1 {
+    display: flex;
+    flex-wrap: wrap;        /* allows wrapping if too many */
+    gap: 2px;              /* space between each item */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: flex-start; /* or center / space-between if you prefer */
+  }
+  
+
+  .listresources1 li {
+    flex: 0 1 auto;         /* makes items fit content naturally */
+  }
+
+.listresources1 a {
+ 
+  padding: 3px 6px;
+  color: #dee6e4;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 10;
+  border-radius: 6px;
+  display: inline-block;  /* ensures nice button-like layout */
+  white-space: nowrap;    /* keeps text in one line */
+}
+
+.listresources1 a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #9ecbff;
+  transform: scale(1.03);
+  margin-left: 0px;
+}
+
+#linkpara{
+  font-size: 10px;
+}
+
+/* src/App.css or your CSS file */
+.searchbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* horizontally center children */
+  justify-content: center;  /* vertically center if needed */
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  text-align: center;       /* centers text inside children */
+  min-height: fit-content;        /* optional: make it full screen height */
+  max-height: max-content;
+  box-sizing: border-box;
+}
+
+
+
 
 /* Progress Pie Charts */
 .progress-pie-charts {
