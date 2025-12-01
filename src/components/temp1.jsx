@@ -1,5 +1,5 @@
 // Template1.jsx
-export const Template1 = ({ basicInfo, skills, education, projects }) => {
+export const Template1 = ({ basicInfo, skills, education, projects, showProjectsHeading = true }) => {
   return (
     <div
     className="resume-page"
@@ -32,11 +32,7 @@ export const Template1 = ({ basicInfo, skills, education, projects }) => {
         <div style={{ textAlign: 'right', fontSize: '14px', color: '#555' }}>
           <div>{basicInfo.portfolio}</div>
           <div>{basicInfo.mobile}</div>
-<div>
-  {basicInfo.dob
-    ? new Date(basicInfo.dob).toLocaleDateString("en-GB")
-    : ""}
-</div>
+<div>{basicInfo.dob}</div>
 
 
           <div>{basicInfo.address}</div>

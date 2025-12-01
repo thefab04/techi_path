@@ -1,5 +1,5 @@
 // Template2.jsx
-export const Template2 = ({ basicInfo, skills, education, projects }) => (
+export const Template2 = ({ basicInfo, skills, education, projects, showProjectsHeading = true }) => (
   <div
     style={{
       width: "210mm",
@@ -24,8 +24,7 @@ export const Template2 = ({ basicInfo, skills, education, projects }) => (
       <p style={{ margin: "3px 0", fontSize: "15px" }}>{basicInfo.portfolio} | {basicInfo.mobile}</p>
       <p style={{ margin: "3px 0", fontSize: "15px" }}></p>
 <p style={{ margin: "3px 0", fontSize: "15px" }}>
-  {basicInfo.dob ? new Date(basicInfo.dob).toLocaleDateString('en-GB') : ""}
-  {basicInfo.address ? ` | ${basicInfo.address}` : ""}
+  {basicInfo.dob} {basicInfo.address ? ` | ${basicInfo.address}` : ""}
 </p>
 
     </div>
@@ -42,7 +41,7 @@ export const Template2 = ({ basicInfo, skills, education, projects }) => (
 
         {/* Projects */}
         <section style={{ marginBottom: "25px" }} class="section-block">
-          <h2 style={{ borderBottom: "1px solid #000", paddingBottom: "8px", fontSize: "20px" }}>Projects / Experience</h2>
+          {showProjectsHeading && <h2 style={{ borderBottom: "1px solid #000", paddingBottom: "8px", fontSize: "20px" }}>Projects / Experience</h2>}
           <ul style={{ marginTop: "12px", paddingLeft: "22px", fontSize: "15px" }}>
             {projects.map((p, i) => (
               <li key={i} style={{ marginBottom: "12px" }}  class="section-block">

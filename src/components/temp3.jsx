@@ -1,5 +1,5 @@
 // Template3.jsx
-export const Template3 = ({ basicInfo, skills, education, projects }) => (
+export const Template3 = ({ basicInfo, skills, education, projects, showProjectsHeading = true }) => (
   <div
     style={{
       width: "210mm",
@@ -29,9 +29,9 @@ export const Template3 = ({ basicInfo, skills, education, projects }) => (
       }}
       class="section-block"
     >
-      <h2 style={{ marginTop: 0, fontSize: "22px", borderBottom: "1px solid #fff", paddingBottom: "12px" }}>
+      {showProjectsHeading && <h2 style={{ marginTop: 0, fontSize: "22px", borderBottom: "1px solid #fff", paddingBottom: "12px" }}>
         Projects / Experience
-      </h2>
+      </h2>}
 
       <ul style={{ listStyle: "none", paddingLeft: 0, marginTop: "12px", fontSize: "15px" }}>
         {projects.map((p, i) => (
@@ -58,8 +58,7 @@ export const Template3 = ({ basicInfo, skills, education, projects }) => (
         </p>
 
         <p style={{ margin: "4px 0", fontSize: "15px" }}>
-          {basicInfo.dob ? new Date(basicInfo.dob).toLocaleDateString("en-GB") : ""}
-          {basicInfo.address && ` | ${basicInfo.address}`}
+          {basicInfo.dob} {basicInfo.address && ` | ${basicInfo.address}`}
         </p>
       </div>
 

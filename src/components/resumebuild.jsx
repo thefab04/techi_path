@@ -24,6 +24,7 @@ const ResumeBuilder = () => {
   const [education, setEducation] = useState([{ school: "", degree: "", cgpa: "" }]);
   const [projects, setProjects] = useState([{ title: "", desc: "" }]);
   const [selectedTemplate, setSelectedTemplate] = useState("Template1");
+  const [showProjectsHeading, setShowProjectsHeading] = useState(true);
 
   const handleBasicChange = (e) => {
     setBasicInfo({ ...basicInfo, [e.target.name]: e.target.value });
@@ -122,6 +123,7 @@ previewWindow.document.write(`
         skills={skills}
         education={education}
         projects={projects}
+        showProjectsHeading={showProjectsHeading}
       />
     );
   }, 200);
@@ -140,6 +142,7 @@ const downloadPDF = () => {
       skills={skills}
       education={education}
       projects={projects}
+      showProjectsHeading={showProjectsHeading}
     />
   );
 
@@ -236,6 +239,15 @@ const downloadPDF = () => {
         ))}
         <button type="button" onClick={addProject} className="animated-button">Add Project</button>
 
+        <br /><br />
+        <label>
+          <input
+            type="checkbox"
+            checked={showProjectsHeading}
+            onChange={(e) => setShowProjectsHeading(e.target.checked)}
+          />
+          Show "Projects / Experience" heading
+        </label>
 
         <br /><br /><br />
       {/* Template Selection */}

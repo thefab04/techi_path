@@ -1,5 +1,5 @@
 // Template5.jsx
-export const Template5 = ({ basicInfo, skills, education, projects }) => (
+export const Template5 = ({ basicInfo, skills, education, projects, showProjectsHeading = true }) => (
   <div
     style={{
       width: "210mm",
@@ -29,7 +29,7 @@ export const Template5 = ({ basicInfo, skills, education, projects }) => (
         <p style={{ fontSize: "15px", marginTop: "8px" }}>
           {basicInfo.portfolio}<br />
           {basicInfo.mobile}<br />
-          {basicInfo.dob ? new Date(basicInfo.dob).toLocaleDateString('en-GB') : ''}<br />
+          {basicInfo.dob}<br />
 
           {basicInfo.address}
         </p>
@@ -66,7 +66,7 @@ export const Template5 = ({ basicInfo, skills, education, projects }) => (
 
 
       <section style={{ marginTop: "25px" }} class="section-block">
-        <h3 style={{ borderBottom: "1px solid #ccc", paddingBottom: "6px", fontSize: "18px" }}>Projects / Experience</h3>
+        {showProjectsHeading && <h3 style={{ borderBottom: "1px solid #ccc", paddingBottom: "6px", fontSize: "18px" }}>Projects / Experience</h3>}
         {projects.map((p, i) => (
           <div key={i} style={{ marginTop: "12px", fontSize: "15px" }}  class="section-block">
             <strong>{p.title}</strong>
