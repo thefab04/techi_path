@@ -15,6 +15,14 @@ const path = require("path");
 dotenv.config();
 const app = express();
 
+const dotenv = require("dotenv");
+
+const envFile = `.env.${process.env.NODE_ENV || "development"}`;
+
+dotenv.config({ path: envFile });
+
+console.log("Running Environment:", process.env.NODE_ENV);
+
 // ✅ Step 1: Enable CORS **before** anything else
 app.use(cors({
   origin: ["https://techquest.pages.dev","http://localhost:3000" ],
