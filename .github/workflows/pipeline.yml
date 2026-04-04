@@ -1,0 +1,35 @@
+name: TechQuest CI Pipeline   # Name shown in GitHub Actions tab
+
+on:
+  push:
+    branches: [ "feature-new" ]      # Runs when code is pushed to main
+  pull_request:
+    branches: [ "feature-new" ]      # Runs on PRs too
+
+jobs:
+  build:
+    runs-on: ubuntu-latest    # GitHub creates a temporary Linux machine
+
+    steps:
+
+    # 1️⃣ Download your repository code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2️⃣ Setup Docker Buildx (advanced builder)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # 3️⃣ Build Backend Docker Image
+    - name: Build Backend Image
+      run: |
+        docker build -t techquest-backend ./backend
+
+    # 4️⃣ Build Frontend Docker Image
+    - name: Build Frontend Image
+      run: |
+        docker build -t techquest-frontend ./frontend
+
+    # 5️⃣ Verify images built successfully
+    - name: List Docker Images
+      run: docker images
