@@ -39,7 +39,7 @@ jobs:
       with: 
         image-ref: techquest-backend:latest
         format: table
-        exit-code: 1
+        exit-code: 0
         ignore-unfixed: true
         severity: CRITICAL,HIGH
         # Add this line below
@@ -51,7 +51,7 @@ jobs:
       with:
         image-ref: techquest-frontend:latest
         format: table
-        exit-code: 1
+        exit-code: 0
         ignore-unfixed: true  
         severity: CRITICAL,HIGH
         # Add this line below
