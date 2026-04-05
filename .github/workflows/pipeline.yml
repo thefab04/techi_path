@@ -23,12 +23,12 @@ jobs:
     # 3️⃣ Build Backend Docker Image
     - name: Build Backend Image
       run: |
-        docker build -t techquest-backend ./backend
+        docker build -t techquest-backend ./project/backend
 
     # 4️⃣ Build Frontend Docker Image
     - name: Build Frontend Image
       run: |
-        docker build -t techquest-frontend ./src
+        docker build -t techquest-frontend ./project/src
 
     # 5️⃣ Verify images built successfully
     - name: List Docker Images
